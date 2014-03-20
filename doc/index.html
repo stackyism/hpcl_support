@@ -1,0 +1,177 @@
+<html>
+<head>
+<title>Documentation</title>
+<style type="text/css">
+	#header{
+		width:100%;
+		height: 20%;
+		text-align: center;
+		position: relative;
+		margin-top: 0;
+		margin-left: 0;
+		margin-right: 0;
+
+	}
+	#content{
+		width: 100%;
+		height: 50%;
+		position: relative;
+	}
+</style>
+</head>
+
+
+<body>
+	<div id="header">
+	<h2 style="margin-top:0;"><strong>DOCUMENTATION</strong></h2>
+	<h3 style="margin-top:0;">CUCM Web Application</h3>
+	<h4 style="margin-top:0;">Integrated on a support Web Page for Portal</h4>
+	<hr>
+	</div>
+	<div id="introduction" style="font-size:15px;font-weight: 400;font-family: times;">
+		<h2>INTRODUCTION</h2>
+		<pre style="margin-left:10;">
+This Project is based on Cisco Unified Communication Manager. As, we know that HPCL has CISCO servers and applications deployed.
+It is being frequently used to set up the communication of any form on the server using Web APIs available on the <a href="http://jabberdeveloper.com" target="_blank">Cisco Jabber Developer Site</a>.
+
+There are main two parts to this project:
+1. Succesful working of on-premise chat-client using <a target="_blank" href="http://developer.cisco.com/web/jabber-developer/on-prem-deployment">Cisco AJAX XMPP Library</a>.
+2. Support Page for HPCL connecting chat service to the Help Desk.
+
+<b style="font-weight:1000;">Note:</b> It also consists of another part which is calling using CUCM and CUP servers, and <a href="http://developer.cisco.com/web/jabber-developer/get-started1">Cisco Video and Voice</a> APIs.
+
+Now, for succesful testing and using the APIs, there is a need of a particual environment.
+Please follow these steps one by one and please send your queries to my mail <a href="mailto:stakhi08@gmail.com?subject=hpcl" target="_top">MAIL</a> or contact at <a href="http://facebook.com/stakhi08" target="_blank">Facebook</a>
+		</pre>
+	</div>
+	<div id="content">
+		<h3 style="text-align:center;">1.  ON-PREMISE CHAT-CLIENT</h3>
+		<ol>
+			<li>Setting up the local server on PC to enjoy the frequent and easy testing of the changes.<n style="font-weight:500;">(HIGHLY RECOMMENDED)</n>
+				<dd>-If you feel that you can manage and test the components by directly accessing them in browser then you can skip this step.</dd>
+			<p style="margin-top:5;">
+				<ul>
+				<li>We need <a href="http://www.apachefriends.org/en/xampp.html" target="_blank">XAMPP</a> for the purpose of setting up the local server.</li>
+				<br>
+				<li>You can download and install the installer version as per your OS by simply following the installation guide.(Recommended Microsoft Windows XP,7,8 or later)
+				</li>
+				<br>
+				<li>After you have successfully installed the XAMPP server, go to the C: Drive and in xampp folder, open the xampp-control<br>
+					It will open the XAMPP controller infront of you, make sure to start the apache and mysql services everytime before testing.
+				</li>
+				<br>
+				<li>Now, in the same xampp folder, enter into folder htdocs, here make a folder according to your needs, and put all the Web files in it.<br>
+					And then you can access you xampp in browser by opening, link, <a href="http://localhost">"localhost/[newFolderName]"</a> or <a href="http://127.0.0.1">"127.0.0.1/[newFolderName]"</a>
+					<br><b>Note: </b> Clicking above links will take you to the xampp default page in htdocs/xampp folder which is "index.html"
+				</li>
+				<h3>Now, you have successfully made your PC a localserver, which can be accessed locally or by any other PC connected in LAN(Local Network) by just putting the IP of the PC.</h3>
+				<n>Resource: How to get the <a href="http://www.wikihow.com/Find-the-IP-Address-of-Your-PC">IP Address</a> of your PC <br>
+					<a href="#header">go to top</a>
+				</n>
+			</ul>
+			</p>
+			</li><br>
+			<li>
+				For testing the APIs and working on them.
+				
+				<ul  style="margin-top:5;">
+					<li>
+					<a href="http://developer.cisco.com/web/jabber-developer/on-prem-deployment" target="_blank">Download</a>
+					 the Cisco AJAX XMPP Library (aka CAXL)
+				 	</li>
+				 	<br>
+				 	<li>
+				 		Extract all the files to a new Folder in htdocs, or anywhere(if not using XAMPP).<br>
+				 		And Access all the files by going to the same link of "localhost/[newFolder]"
+				 	</li>
+				 	<br>
+				 	<li>Some basic changes to run the files successfully on HPCL server.
+				 		<ol  style="margin-top:5;">
+				 			<li>
+				 				For making basic-chat-demo to work, go to the code of basic-chat.html by opening it in any <a href="http://www.sublimetext.com/">text editor</a>. (Sublime Editor Download link provided)<br>
+				 				And make the following 2 changes to the "var demo_config" in javascript.<br>
+				 				I. Change domain from "psdtemea.cisco.com" to "hpcl.co.in"<br>
+				 				II. Change httpBindingURL from "http://cup02:7335/httpbinding" to 
+				 				<a href="https://10.15.0.10:7335/httpbinding" target="_blank">"https://10.15.0.10:7335/httpbinding"</a>
+				 				<br>
+				 				Please open this link and accept the certificate and add it to the browser(Recommended Firefox).<br>
+
+				 			</li>	
+				 		</ol><br>
+				 		<a href="#header">go to top</a><br>
+				 	</li>
+				</ul>
+			</li>
+			<br>
+			
+			<li>
+				For Voice and Video APIs:
+				<ul style="margin-top:5;">
+					<li>
+						<a href="http://developer.cisco.com/web/jabber-developer/get-started1" target="_blank">Download</a>
+						 the APIs as per the instructions given on this page and extract into a new folder in htdocs of xampp.
+					</li><br>
+					<li><a href="CiscoWebCommunicator.exe">Cisco Web Communicator</a> is the installer which connects laptop devices
+						 to the Web Page of Cisco APIs.
+					</li><br>
+					<li>
+						Now, in the folder extracted, go to the sample folder and open the sample.html in firefox.<br>
+						This will open the Voice and Video support of Cisco Jabber.<br>
+						Username and Password must be of hpcl.co.in domain.<br>
+						In CUCM field, Enter: <a href="http://10.15.0.10" target="_blank">10.15.0.7</a>.<br>
+						Choose phone Mode according to your needs.<br>
+						In CUP or WebEx Domain, Enter: <a href="http://10.15.0.10" target="_blank">10.15.0.10</a><br>
+						In http Binding URL, Enter: <a href="https://10.15.0.10:7335/httpbinding" target="_blank">
+						https://10.15.0.10:7335/httpbinding</a><br>
+						Choose the option in phones, if phone mode is SoftPhone and connect, then the make call button gets activated.<br>
+						Call and ENJOY !!!<br>
+						<a href="#header">go to top</a><br>
+					</li>
+				</ul>
+			</li>
+			<br>
+
+		</ol>
+		<br>
+		<h3 style="text-align:center;">2. SUPPORT PORTAL</h3>
+		<ol>
+			<li>If you have reached this file, means you already have the Support Folder, but then too a <a href="support.zip">zip file</a> is provided.</li><br>
+			<a href="#header">go to top</a><br><br>
+			<li>Extract the files to a new folder in htdocs of xampp.</li><br>
+			<b>Note: The jabberwerx.js and jabberwerx.ui.js are a bit different from the ones provided in the other folders,<br>
+				because the refrencing of EMOTICONS, style.css, RESOURCES, have been changed.<br>
+				In jabberwerx.ui,<br>
+				line 28140, 27259, 30267 have been modified accordingly to fit the refrencing as per the needs.<br>
+			</b>	<br>
+			<a href="#header">go to top</a><br><br>
+			<li>
+				<a href="persistcontactdemo.html">PersistContactDemo</a> is the file which contains the hard coded domain, CUP server IP,<br><br>
+				Username and password for initiating a client with connection to the server for the communication purposes.<br><br>
+				It contains the contactContainer which uses temprory JIDs to be added to the chat Client for Help Desk which are<br><br>
+				Hard Coded for once, which can be manipulated by accessing Database using PHP/mySQL or any other tool.<br>
+
+			</li><br>
+			<a href="#header">go to top</a><br><br>
+			<li>
+				The main UI of the support Page is in the file <a href="support.html">support.html</a>.<br><br>
+				This has the UI based on portal, integrating three various options to ask help for and get a live chat with the support team.<br><br>
+				This also has a "form" element, which in turn exectes the html code of persistContactDemo page.<br>
+				Right now the chat-box is initiated automatically, but it will be modified soon to answer to the clicks on the specific options.<br>
+			</li><br>
+			<a href="#header">go to top</a><br>
+		</ol>
+		<p style="font-weight:900;">Things to keep in mind:<br>
+			1. Please always after configuring the proxy in firefox, add 10.0.0.0/8 to bypass the proxy.<br>
+				This will in turn allow you to access, https://10.15.0.10:7335/httpbinding.<br>
+			2. Always check if the https://10.15.0.10:7335/httpbinding URL is working in the browser.<br>
+			3. The persistContactDemo doesn't allow to refresh the page for now, but it gives an alert if you refresh the page,<br>
+				For removing this bug, you will have to clear the history.
+		</p>
+		<img src="persist.png"><p>this is the connected client</p>
+		<img src="persist2.png"><p>this is the chat initiated with bot</p>
+		<img src="support.png"><p>this is the connected working support page</p>
+
+	</div>
+
+</body>
+</html>

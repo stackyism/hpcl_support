@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <!--    * THIS SAMPLE APPLICATION AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY
+        * OF ANY KIND BY CISCO, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
+        * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY FITNESS FOR A PARTICULAR
+        * PURPOSE, NONINFRINGEMENT, SATISFACTORY QUALITY OR ARISING FROM A COURSE OF
+        * DEALING, LAW, USAGE, OR TRADE PRACTICE. CISCO TAKES NO RESPONSIBILITY
+        * REGARDING ITS USAGE IN AN APPLICATION, AND IT IS PRESENTED ONLY AS AN
+        * EXAMPLE. THE SAMPLE CODE HAS NOT BEEN THOROUGHLY TESTED AND IS PROVIDED AS AN
+        * EXAMPLE ONLY, THEREFORE CISCO DOES NOT GUARANTEE OR MAKE ANY REPRESENTATIONS
+        * REGARDING ITS RELIABILITY, SERVICEABILITY, OR FUNCTION. IN NO EVENT DOES
+        * CISCO WARRANT THAT THE SOFTWARE IS ERROR FREE OR THAT CUSTOMER WILL BE ABLE
+        * TO OPERATE THE SOFTWARE WITHOUT PROBLEMS OR INTERRUPTIONS. NOR DOES CISCO
+        * WARRANT THAT THE SOFTWARE OR ANY EQUIPMENT ON WHICH THE SOFTWARE IS USED WILL
+        * BE FREE OF VULNERABILITY TO INTRUSION OR ATTACK. THIS SAMPLE APPLICATION IS
+        * NOT SUPPORTED BY CISCO IN ANY MANNER. CISCO DOES NOT ASSUME ANY LIABILITY
+        * ARISING FROM THE USE OF THE APPLICATION. FURTHERMORE, IN NO EVENT SHALL CISCO
+        * OR ITS SUPPLIERS BE LIABLE FOR ANY INCIDENTAL OR CONSEQUENTIAL DAMAGES, LOST
+        * PROFITS, OR LOST DATA, OR ANY OTHER INDIRECT DAMAGES EVEN IF CISCO OR ITS
+        * SUPPLIERS HAVE BEEN INFORMED OF THE POSSIBILITY THEREOF.-->
+
+        <!--See comments in basic-chat.html for explanation of code.-->
+
+        <!--include styles for the container page -->
+        <link rel="stylesheet" href="assets/css/reset.css"/>
+        <link rel="stylesheet" href="assets/css/sample.css"/>
+
+        <title>Basic Jabber Chat Demo</title>
+        <style>
+             .title {
+                text-align: center;
+            }
+            .demo {
+                width:      95%;
+                height:     900px;
+            }
+            .demo iframe{
+                height:     95%;
+                width:      48%;
+                display:    inline;
+                margin-left: 10px;
+            }
+        </style>
+    </head>
+    <body>
+    <div id="doc_wrapper">
+        <!--  begin header -->
+        <div id="header">
+
+            <div id="headerLeft">
+                <div>
+                    <div style="float: left; width: 20%;">
+                        <a href="https://www.cisco.com" target="_blank"><img src="assets/images/ciscologo_grey.jpg" alt="Cisco"></a>
+                    </div>
+                    <div style="float: right; width: 80%; padding-top:18px;">
+                        <h2 style="display:inline;">Basic Jabber Chat Demo</h2>
+                    </div>
+
+                </div>
+                <div style="clear:both"></div>
+
+            </div>
+            <div id="headerRight">
+                <div id="header_links">
+                    <a target="_blank" href="http://developer.cisco.com/web/jabber-developer">Jabber Developer Site</a>
+                </div>
+
+
+            </div>
+        </div><!-- header -->
+        <div class="title" style="text-align: left; margin-top: 10px;">
+            <p>This example demonstrates how to create a basic chat client.</p>
+            <p>You can login as two different users and test sending messages back and forth.  The file, basic-chat.html,
+            contains the example code for creating the chat client and responding to the events.</p>
+        </div>
+        <div class="demo">
+            <iframe  id="echo-1" src="basic-chat.html" frameborder="0"></iframe>
+            <iframe  id="echo-2" src="basic-chat.html" frameborder="0"></iframe>
+        </div>
+        </div>
+    </body>
+</html>

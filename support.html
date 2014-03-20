@@ -1,0 +1,144 @@
+<html>
+	<head>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+		<style type="text/css">
+
+			body{
+				margin-top: 0;
+				margin-left: 0;
+				margin-right: 0;
+			}
+			#total_support{
+				width: 100%;
+				height: 80%;
+				position: absolute;
+			}
+			.support{
+				width: 40%;
+				height: 100%;
+				position: relative;
+				float: left;
+				margin-left: 0px;
+
+			}
+			.bbm, .cucm, .gw{
+				width: 70%;
+				height: 33%;
+			}
+			.gw_img_1{
+				width: 25%;
+				height: 80%;
+				float: left;
+
+			}
+			#header{
+				font-size: 40px;
+				position: relative;
+				color: #045FB4;
+				float: center;
+				text-align: center;
+				margin-left: 0;
+				margin-right: 0;
+				margin-top: 0;
+			}
+			#title{
+				width: 100%;
+				height: 40px;
+			}
+			#chat_frame_container{
+				width: 50%;
+				height: 100%;
+				float: left;
+				position: relative;
+			}
+			#chat_frame{
+				width: 80%;
+				height: 100%;
+				position: relative;
+			}
+			.cucm:hover, .gw:hover, .bbm:hover{
+				opacity: 0.7;
+				border: 20px;
+				border-color: grey;
+				border-radius: 20px;
+
+			}
+
+			
+		</style>
+
+		<script type="text/javascript">
+			/*$(document).ready(function () {
+				// body...
+				$("#chat_frame").hide();
+			});
+			*/
+			function show_bb_support () {
+				// body...
+				$("#chat_frame").hide();
+			}
+
+			function reloadagain () {
+				// body...
+				//alert("reloaded");
+				
+				$(document).ready(function () {
+					// body...
+					alert("reloaded");
+					window.location.replace("support.html")
+					
+				});
+				
+			}
+			
+		</script>
+	</head>
+
+
+
+
+
+	<body>
+		<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tbody>
+			<tr>
+			<td width="30%">
+			<img src="images/portal.gif">
+			</td>
+			<td width="67%" background="images/portal_f.gif" style=""></td>
+			</tr>
+			</tbody>
+		</table>
+		
+		<div id="title">
+			<h3 id= "header">SUPPORT PORTAL</h3>
+		</div>
+		<div id="total_support">
+			<div class="support" >
+				<div class="bbm">
+					<div onclick="show_bb_support()">
+						<img src="images/bb_logo.jpg" style="width:100%;height:100%;position:relative;">
+					</div>
+				</div>
+				<div class="cucm">
+					<div>
+						<img src="images/cucm.jpg" style="width:40%;height:50%;margin-left:10px;float:center;position:relative;">
+						<h3 style="position:relative;"><strong>UNIFIED COMMUNICATION MANAGER</strong></h3>
+					</div>
+				</div>
+				<div class="gw">
+					<div class="gw_img_1">
+						<img src="images/groupwise.jpg" style="width:100%;height:100%">
+					</div>
+					<div style="width:70%;height:90%;float:left;text-align:left;margin-top:25px;font-size:20px;position:relative;"><h3><strong>Nowell GroupWise</strong></h3></div>
+				</div>
+			</div>
+			<div id="chat_frame_container">
+				<iframe id="chat_frame" src="persistcontactdemo.html" scrolling="no"></iframe>
+			</div>
+			<button id="clear_history" onclick="reloadagain()">Clear History</button>
+		</div>
+	</body>
+
+
+</html>	

@@ -1,0 +1,336 @@
+<html>
+    <head>
+        <title>Cisco AJAX XMPP Library ~ Persistent Contact</title>
+        <link rel="stylesheet" href="resources/themes/default/css/styles.css" type="text/css" media="screen" />        
+        <script type="text/javascript" src="jabberwerx.ui.js"></script>
+        <script type="text/javascript" src="jabberwerx.js"></script>
+        
+        
+        <style type="text/css">
+            div.my_tabs {
+                position: relative;
+                float: left;
+                margin-top: 20px;
+            
+            }
+            div.plugin{
+                position: relative;
+                float: left;
+                margin-left: 10px;
+                height: 100px;
+
+                
+            }
+            #contact-view{
+                position: relative;
+                float: left;
+                
+            }
+            .frame1{
+                width: 1000px;
+                height: 500px;
+                border-width: 2;
+                position: relative;
+                margin-top: 200px;
+            }
+        </style>
+        <script type="text/javascript">
+        var big_that;
+var demo_config = {
+    user: "33333330",
+    password: "Hpcl@123",
+    domain: "hpcl.co.in",
+    maxGraphAge: 30,
+    unsecureAllowed: false,
+    logPersistence: false
+};
+
+jabberwerx.util.config.logPersistence = demo_config.logPersistence;
+jabberwerx.util.setMaxGraphAge(demo_config.maxGraphAge);
+jabberwerx._config.unsecureAllowed = demo_config.unsecureAllowed;
+jabberwerx._config.httpBindingURL = demo_config.httpBindingURL;
+jabberwerx._config.httpBindingURL_secondary = demo_config.httpBindingURL_secondary;
+jabberwerx._config.serviceDiscoveryEnabled = demo_config.serviceDiscoveryEnabled;
+sample = {};
+
+sample.IntroView = jabberwerx.ui.JWView.extend({
+    init: function() {
+        this._super();
+    },
+    destroy: function() {
+        this._super();
+    },
+
+    createDOM: function(doc) {
+        var data = $("<div/>", doc).addClass("jabberwerx intro");
+
+        $("<h2/>").appendTo(data).
+                   text("Welcome to Cisco AJAX XMPP Library");
+
+        return data;
+    },
+
+    setTabControl: function(tab) {
+        this._super(tab);
+
+        if (tab) {
+            tab.label("Welcome");
+        }
+    }
+}, "sample.IntroView");
+
+sample.IntroView.mixin(jabberwerx.ui.Tabbable);
+
+
+jabberwerx.ui.ContactDemo = jabberwerx.ui.JWApp.extend({    
+    appCreate: function() {
+    
+        this._super(); 
+        this.cache = null;
+        this.rosterFetched = false;
+        this.client = new jabberwerx.Client('sampleclient');
+        
+        this.rosterController = new jabberwerx.RosterController(this.client);
+
+        this.views = [];
+        
+        this.client.entitySet.event("batchUpdateEnded").bind(this.invocation("onRosterFetch"));
+        this.entities = null; //eventually populated after roster fetch
+        
+        this.tabbedView = new jabberwerx.ui.TabbedView();
+
+        var chat = new jabberwerx.ChatController(this.client);
+        
+        var that = this;
+        big_that = that;
+        chat.event("chatSessionOpened").bind(function(evt) {
+        var session = evt.data.chatSession;
+        var id = "chat11:" + session.jid;
+        var tab = that.tabbedView.getTab(id);
+        if (!tab) {
+            tab = that.tabbedView.addTab(id, new jabberwerx.ui.ChatView(session));
+        }
+        });
+        
+        var onConnected = function() {};        
+        var onClientError = function() { alert('error: ' + that.client.getClientStatusString(that.client.clientState)); };
+            
+        var connectArgs = {
+            // the proxy url to the BOSH server
+            httpBindingURL: 'https://10.15.0.10:7335/httpbinding',
+            // onConnected is the success callback method
+            successCallback: onConnected,
+            // onClientError is the error callback method
+            errorCallback: onClientError
+        };
+        
+        //connect on creation 
+        try {
+            this.client.connect(demo_config.user + "@" + demo_config.domain, demo_config.password, connectArgs);
+        } catch (ex) {
+            jabberwerx.util.debug.log("error authenticating: " + ex + " ::: " + (ex.stack || ""));
+        }       
+
+
+    },
+
+
+    
+    appInitialize: function() {
+        // iterate through the entity set
+
+        //tabbedView
+        this.tabbedView.render().appendTo("div.my_tabs");
+        this.tabbedView.dimensions({width: 500, height: 300});
+
+
+           /* $("a.contactlink").click(function () {
+                // body...
+                var y = this.href;
+                that.alert1(y);
+            });*/
+        
+
+        welcome_tab = this.tabbedView.getTab("introview");
+        //alert(welcome_tab);
+        if(!welcome_tab){
+        welcome_tab = this.tabbedView.addTab("introview", new sample.IntroView());
+    }
+        if(welcome_tab){
+            welcome_tab.activate();
+        }
+        var sendMediated = true;
+
+        jabberwerx.$.each(this.views, function() {
+            this.render().appendTo('#contact-view');
+            //this.clickOnContact();
+        });
+        
+        //alert('this is working');
+
+    },
+    
+    destroy: function() {
+        this.tabbedView.destroy();
+        
+        this.client.destroy();
+        this.client = null;
+        this._super();
+    },
+    
+    /**
+     * Callback method for a roster fetch
+     */
+    onRosterFetch: function() {
+        jabberwerx.util.debug.log("triggering batch update");
+        /* 
+         * After a fetch, the entity set will have been updated with the list of contacts
+         * so we will retrieve the entity set and iterate through looking for instances of
+         * type jabberwerx.Contact
+         */ 
+        //application is a singleton
+        var that = jabberwerx.util.app._jwappinst;
+        that.entities = that.client.entitySet.toArray();
+        // iterate through the entity set
+        jabberwerx.$.each(that.entities, function() {
+            var entity = this;
+            that.cache = entity.cache;
+            if (entity instanceof jabberwerx.Contact) {
+                var view = new jabberwerx.ui.ContactPresenceView(entity);
+                //view.render().appendTo('#contact-view');
+                //that.views.push(view);
+            } 
+        });
+        
+        if (that.cache) {
+            //alert("<?php phpinfo(); ?>");
+            that.addTemporaryEntity(that.cache,'31919350@hpcl.co.in');
+            that.addTemporaryEntity(that.cache,'31111110@hpcl.co.in');
+            that.addTemporaryEntity(that.cache,'en2hi@bot.talk.google.com');
+            that.addTemporaryEntity(that.cache,'31901490@hpcl.co.in');
+            //that.cache = null;
+            $(document).ready(function(){
+            $("a.contactlink").click(function () {
+                // body...
+                var y = this.href;
+                that.alert1(y);
+            });
+        });
+            //that.clickOnContact();
+        }
+
+        that.rosterFetched = true; 
+    },
+
+
+    
+    addTemporaryEntity: function(entityCache,contactid) {
+        var x = contactid;
+        var jid = new jabberwerx.JID(x);
+        //var entityCache = new jabberwerx.ClientEntityCache();
+        var entity = entityCache.entity(jid);
+        if (!entity) {
+            entity = new jabberwerx.TemporaryEntity(jid);
+            entity.cache = entityCache;
+        }
+        var view = new jabberwerx.ui.ContactPresenceView(entity);
+        view.render().appendTo('#contact-view');
+        this.views.push(view);
+        
+        //entity.destroy();
+    },
+
+    alert1: function(stringjid2) {
+        // body...
+        //alert('is this reaching here atleast ?');
+        var localstring = stringjid2.toString();
+            var indexofhash = localstring.indexOf('#');
+            var indexofat = localstring.indexOf('@');
+            var finalstring = localstring.substring(indexofhash + 1);
+            var jidstring = finalstring;
+            //alert(indexofstring);
+            //var localstring = stringjid.subString(stringjid.indexOf('#')+1,);
+
+            //alert(jidstring);
+            var newjid = new jabberwerx.JID(jidstring);
+            var entityCache = new jabberwerx.ClientEntityCache();
+            var newentity = entityCache.entity(newjid);
+            if (!newentity) {
+            newentity = new jabberwerx.TemporaryEntity(newjid);
+            newentity.cache = entityCache;
+            }
+            if (newentity instanceof jabberwerx.TemporaryEntity) {
+                var id = "chat11:" + newentity.jid.getBareJIDString();
+                //alert(newentity.jid);
+                var session = this.client.controllers.chat.openSession(newjid);
+                this.client.controllers.chat._chatSessions.push(session);
+                
+                var tab = this.tabbedView.getTab(id);
+                //alert(tab);
+                if (tab) {
+                tab.activate();
+                }
+                $('textarea.chat_input').select();
+
+            }
+            //alert(newentity.jid.getBareJIDString());
+    }
+    
+}, "jabberwerx.ui.ContactDemo");
+
+jabberwerx.app.persistedApplicationClass('jabberwerx.ui.ContactDemo');
+
+
+
+
+        </script>
+        <script type="text/javascript">
+        function buttonclicked () {
+            // body...
+
+            $("a.contactlink").click(function () {
+                // body...
+                var y = this.href;
+                that.alert1(y);
+            });
+            alert('button clicked');
+            //location.href = "../support/persistcontactdemo.html";
+            window.open("persistcontactdemo.html","_self");
+        }
+        $('a.plugin_link').click(function () {
+    // body...
+    $(this).target = "_blank";
+        window.open($(this).prop('href'));
+        return false;
+});
+        function checkFirstVisit() {
+  if(document.cookie.indexOf('mycookie')==-1) {
+    // cookie doesn't exist, create it now
+    document.cookie = 'mycookie=1';
+  }
+  else {
+    // not first visit, so alert
+    
+            $("a.contactlink").click(function () {
+                // body...
+                var y = this.href;
+                that.alert1(y);
+            });
+        
+    alert('You refreshed!');
+
+  }
+}
+        </script>
+    </head>
+    <body onLoad="checkFirstVisit()">
+        <h4>Demo Contact Presence View</h4>
+        
+            <div id="contact-view"></div>
+            <div class="my_tabs"></div>
+            <div class='plugin'><a class='plugin_link' href="../../resources/CiscoWebCommunicator.exe">Download plugin</a></div>
+            
+            <div class="my_tabs1"></div>
+            <button onclick="buttonclicked()">click to check</button>
+    </body>
+</html>

@@ -1,0 +1,785 @@
+/*=============================================================================
+//
+// License
+//  
+// The contents of this file are subject to the Jabber Commercial Software
+// License (the "License").  You may not copy or use this file, in either 
+// source code or executable form, except in compliance with the License.  
+// You may obtain a copy of the License by contacting Jabber.com, Inc. at 
+// http://www.jabber.com/.
+//  
+// Copyrights
+//  
+// Portions created by or assigned to Jabber.com, Inc. are 
+// Copyright (c) 2001-2011 Jabber, Inc. All Rights Reserved
+//  
+//=============================================================================*/
+
+/* jabberwerx.ui default style sheet */
+.jabberwerx, .jabberwerx * {
+    font-family:    Arial,Helvetica;
+    font-size:      12px;
+}
+
+/* text input styles */
+.jabberwerx input[type=text],
+.jabberwerx input[type=password],
+.jabberwerx textarea {
+    border:     1px solid #60E4FB;
+    margin:     4px 5px;
+    padding:    0px;
+    height:     21px;
+    resize:     none;
+}
+.jabberwerx textarea {
+    height:     42px;
+}
+
+/* tabbed pane styles */
+.jabberwerx.tabpane {
+    position:       absolute;
+    padding:        2px 4px 2px 2px;
+    margin:         10px;
+}
+
+.jabberwerx.tabpane .tabcontent {
+    position:       absolute;
+    top:            2px;
+    left:           2px;
+    margin:         0px;
+    padding:        10px;
+    background:     #f0f0f0;
+    border:         1px solid #999999;
+}
+.jabberwerx.tabpane .tabcontent .tabdata {
+    position:       absolute;
+    top:            10px;
+    left:           10px;
+}
+
+.jabberwerx.tabpane .tablist {
+    position:       absolute;
+    top:            2px;
+    right:          2px;
+    margin:         0px 2px 0px 0px;
+    padding:        0px;
+    vertical-align: top;
+    overflow-x:     hidden;
+    overflow-y:     auto;
+    border-left:    none;
+}
+
+.jabberwerx.tabpane .tablist .tab {
+    position:               relative;
+    margin:                 0px 0px 2px 0px;
+    padding:                0px 8px;
+    background:             #C1D0DB url("../images/background-tab.png") repeat-y top right;
+    border:                 1px solid #8499A2;
+    border-left:            0px none;
+    -moz-border-radius:     2px;
+    -webkit-border-radius:  2px;
+    border-radius:          2px;
+    height:                 28px;
+    line-height:            28px;
+    cursor:                 pointer;
+    overflow:               hidden;
+    display:                block;
+    font-size:              12px;
+}
+.jabberwerx.tabpane .tablist .tab .notification {
+    float:              right;
+}
+.jabberwerx.tabpane .tablist .tab.attn {
+    background:         #ff4d00 url("../images/background-tab-active.png") repeat-y top right;
+}
+.jabberwerx.tabpane .tablist .tab .closer {
+    position:       absolute;
+    right:          4px;
+    top:            4px;
+    cursor:         pointer;
+    vertical-align: middle;
+    margin-top:     2px;
+}
+.jabberwerx.tabpane .tablist .tab a.tab_link {
+    color:              #000000;
+    text-decoration:    none;
+    white-space:        nowrap;
+    width:              85%;
+    overflow:           hidden;
+    display:            block;
+}
+
+.jabberwerx.tabpane .tablist .tab.hover {
+    background:     #C6F5FE url("../images/background-tab-hover.png") repeat-y top right;
+}
+
+.jabberwerx.tabpane .tablist .tab.active {
+    background:     #f0f0f0 url("../images/background-tab-active.png") repeat-y top right;
+    font-weight:    bold;
+    color:          #000000;
+}
+
+/* presence-related styles */
+.presence.show.chat {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-chat.png");
+}
+.presence.show.available {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-available.png");
+}
+.presence.show.away {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-away.png");
+}
+.presence.show.xa {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-xa.png");
+}
+.presence.show.dnd {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-dnd.png");
+}
+.presence.show.unavailable {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-unavailable.png");
+}
+.presence.show.unknown {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-unknown.png");
+}
+
+/* authentication view styles */
+.jabberwerx.auth_form {
+    width:                  305px;
+    margin:                 0px;
+    padding:                10px;
+    background:             #D9E3E9;
+    border:                 1px solid #8499A2;
+    -moz-border-radius:     2px;
+    -webkit-border-radius:  2px;
+    border-radius:          2px;
+}
+.jabberwerx.auth_form label {
+    padding:        0px;
+    margin:         4px 5px;
+    text-align:     left;
+    line-height:    21px;
+    display:        inline;
+    float:          left;
+}
+
+.jabberwerx.auth_form .username,
+.jabberwerx.auth_form .password {
+    float:          right;
+    margin:         4px 5px;
+    padding:        0px 2px;
+    display:        block;
+    height:         21px;
+    line-height:    21px;
+    float:          right;
+}
+.jabberwerx.auth_form .username_div,
+.jabberwerx.auth_form .password_div {
+    height:     31px;
+}
+
+.jabberwerx.auth_form .submit_div {
+    text-align: right;
+}
+.jabberwerx.auth_form .auth_submit {
+    margin:     10px 0px 0px 5px;
+    padding:    5px 8px;
+}
+.jabberwerx.auth_form .auth_status {
+    color:      #F35000;
+}
+.jabberwerx.auth_form .auth_status_div {
+    text-align: left;
+    padding:    10px 0px 5px 0px;
+}
+
+.jabberwerx.mucview .jabberwerx.roster {
+    float:      left;
+    border:     1px solid #53636A;
+    background: #feffff;
+    margin:     2px 5px 2px 0px;
+}
+.jabberwerx.mucview .jabberwerx.chatview {
+    float:      right;
+}
+.jabberwerx.mucview .muc_title {
+    font-weight:    bold;
+}
+
+/* chat view */
+.jabberwerx.chatview {
+    overflow-x:     hidden;
+    overflow-y:     hidden;
+}
+.jabberwerx.chatview .chat_wrapper {
+    border:         1px solid #53636A;
+    margin:         0px;
+    position:       relative;
+    overflow-x:     hidden;
+    overflow-y:     hidden;
+}
+.jabberwerx.chatview .chat_incoming {
+    background:     #feffff;
+    overflow-x:     auto;
+    overflow-y:     scroll;
+}
+.jabberwerx.chatview .chat_incoming .messageView.error {
+    color:              #F35000;
+}
+.jabberwerx.chatview .chat_badge {
+    position:           absolute;
+    bottom:             0px;
+    text-align:         center;
+    width:              100%;
+    background-color:   #f0f0f0;
+    color:              #6f6f6f;
+}
+.jabberwerx.chatview .chat_input_wrapper {
+    position:       relative;
+    height:         63px;
+    margin:         5px 0px 0px 0px;
+}
+.jabberwerx.messageView.xep245_presentation {
+    font-style: italic;
+}
+.chat_input_wrapper textarea.chat_input {
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    height: 63px;
+}
+.chat_input_wrapper .send_button {
+    position:           absolute;
+    background:         #C1D0DB url("../images/background-button.png") repeat-x top left;
+    border:             1px solid #53636A;
+    -moz-border-radius:     2px;
+    -webkit-border-radius:  2px;
+    border-radius:          2px;
+    color:              #000000;
+    text-decoration:    none;
+    display:            block;
+    text-align:         center;
+    width:              63px;
+    margin-top:         5px;
+    cursor:             pointer;
+}
+.chat_input_wrapper .send_button:hover {
+    background:         #C6F5FE url("../images/background-button-hover.png") repeat-x top left;
+    border:             1px solid #1FA0D5;
+    color:              #000000;
+}
+.chat_input_wrapper .send_button:active {
+    background:         #95EDFD url("../images/background-button-pressed.png") repeat-x top left;
+    border:             1px solid #1FA0D5;
+    color:              #0088C2;
+}
+
+/* subscription view styles */
+.jabberwerx.subscription_view {
+    margin:                 0px;
+    padding:                10px;
+    background:             #D9E3E9;
+    border:                 1px solid #8499A2;
+    -moz-border-radius:     2px;
+    -webkit-border-radius:  2px;
+    border-radius:          2px;
+    width:                  305px;
+}
+.jabberwerx.subscription_view label {
+    padding:        0px;
+    margin:         4px 5px;
+    text-align:     left;
+    line-height:    21px;
+    display:        inline;
+    float:          left;
+}
+.jabberwerx.subscription_view .contact,
+.jabberwerx.subscription_view .nick,
+.jabberwerx.subscription_view .group_select,
+.jabberwerx.subscription_view .group_input {
+    width:          150px;
+    margin:         4px 5px;
+    padding:        0px 2px;
+    display:        block;
+    height:         21px;
+    line-height:    21px;
+    float:          right;
+    overflow-x:     hidden;
+}
+
+.jabberwerx.subscription_view .contact_div,
+.jabberwerx.subscription_view .nick_div,
+.jabberwerx.subscription_view .group_div,
+.jabberwerx.subscription_view .action_div {
+    height:     40px;
+}
+.jabberwerx.subscription_view .action_div {
+    text-align: right;
+}
+.jabberwerx.subscription_view .action_button {
+    width:      80px;
+    margin:     10px 0px 0px 5px;
+    padding:    5px 8px;
+}
+
+/* muc invite view styles */
+.jabberwerx.muc_invite_view {
+    margin:                 0px;
+    padding:                10px;
+    background:             #D9E3E9;
+    border:                 1px solid #8499A2;
+    -moz-border-radius:     2px;
+    -webkit-border-radius:  2px;
+    border-radius:          2px;
+    width:                  365px;
+}
+.jabberwerx.muc_invite_view label {
+    padding:        0px;
+    margin:         4px 5px;
+    text-align:     left;
+    line-height:    21px;
+    display:        inline;
+    float:          left;
+}
+.jabberwerx.muc_invite_view .room,
+.jabberwerx.muc_invite_view .invitor,
+.jabberwerx.muc_invite_view .reason,
+.jabberwerx.muc_invite_view .nick {
+    width:          230px;
+    margin:         4px 5px;
+    padding:        0px 2px;
+    display:        block;
+    height:         21px;
+    line-height:    21px;
+    float:          right;
+    overflow:       hidden;
+}
+.jabberwerx.muc_invite_view .reason {
+    padding:        0px;
+    background:     #FFFFFF;
+    height:         102px;
+    line-height:    auto;
+    overflow:       auto;
+}
+
+.jabberwerx.muc_invite_view .room_div,
+.jabberwerx.muc_invite_view .invitor_div,
+.jabberwerx.muc_invite_view .reason_div,
+.jabberwerx.muc_invite_view .nick_div {
+    height:     31px;
+}
+.jabberwerx.muc_invite_view .reason_div {
+    height:     112px;
+}
+.jabberwerx.muc_invite_view .action_div {
+    text-align: right;
+}
+.jabberwerx.muc_invite_view .action_button {
+    width:      80px;
+    margin:     10px 0px 0px 5px;
+    padding:    5px 8px;
+}
+.jabberwerx.muc_invite_view .error_msg {
+    color: #F35000;
+    margin: 5px 0px 5px 20px;
+}
+
+/* x data form view styles */
+.jabberwerx.xdata_form_view {
+    overflow-x:         auto;
+    overflow-y:         auto;
+}
+
+.jabberwerx.xdata_form_view .title {
+	font-size:      18px;
+	font-weight:    bold;
+	width:          98%;
+	margin:         0px 5px 5px 5px;
+}
+
+.jabberwerx.xdata_form_view .instr {
+	font-style:     italic;
+}
+
+.jabberwerx.xdata_form_view .field_label {
+    width:          40%;
+    vertical-align: top;
+}
+.jabberwerx.xdata_form_view .field_value {
+    width:          60%;
+    vertical-align: top;
+    border:         1px solid #60E4FB;
+}
+
+.jabberwerx.xdata_form_view .field_value input,
+.jabberwerx.xdata_form_view .field_value textarea,
+.jabberwerx.xdata_form_view .field_value select.list-multi,
+.jabberwerx.xdata_form_view .field_value select.jid-multi,
+.jabberwerx.xdata_form_view .field_value.boolean,
+.jabberwerx.xdata_form_view .field_value.fixed,
+.jabberwerx.xdata_form_view .field_value.list-single {
+    border:     none;
+    margin:     0px;
+}
+
+.jabberwerx.xdata_form_view .field_value.jid-single {
+    white-space:    nowrap;
+}
+
+.jabberwerx.xdata_form_view .line-multi {
+	overflow:auto;
+	width:100%;
+}
+
+.jabberwerx.xdata_form_view .line-single {
+	width:100%;
+}
+
+.jabberwerx.xdata_form_view .list-single {
+	width:100%;
+}
+
+.jabberwerx.xdata_form_view .list-multi {
+	width:100%;
+}
+
+.jabberwerx.xdata_form_view .result_table th {
+    text-align:     left;
+    vertical-align: top;
+    margin:         0px;
+    background:     #D9E3E9;
+    border:         1px solid #8499A2;
+    border-left:    1px solid #FFFFFF;
+    border-right:   1px solid #A2B9C9;
+}
+.jabberwerx.xdata_form_view .result_table td {
+    text-align:     left;
+    vertical-align: top;
+    padding:        5px;
+    margin:         0px;
+    border:         none;
+}
+.jabberwerx.xdata_form_view .result_table .field_value {
+    text-align:     left;
+    top-align:      top;
+    width:          168px;
+}
+.jabberwerx.xdata_form_view .result_table .even {
+    margin:         0px;
+    padding:        5px;
+    width:          168px;
+    background:     #F1F5FA;
+    /* border:         1px solid #F1F5FA; */
+}
+.jabberwerx.xdata_form_view .result_table .odd {
+    margin:         0px;
+    padding:        5px;
+    width:          168px;
+    background:     #E5EBF3;
+    border:         1px solid #E5EBF3;
+}
+.jabberwerx.xdata_form_view .result_table .field_value.boolean {
+    width:          auto;
+}
+.jabberwerx.xdata_form_view .result_table tr.selected {
+    background:             #ADD050;
+}
+
+.jabberwerx.xdata_form_view .form_validation_error
+{
+
+    color:  #F35000;
+
+}
+
+
+/* muc config view styles */
+.jabberwerx.muc_config_view {
+    background:             #F1F5FA;
+    border:                 1px solid #8499A2;
+    margin:                 0px;
+    padding:                5px;
+    -moz-border-radius:     2px;
+    -webkit-border-radius:  2px;
+    border-radius:          2px;
+}
+
+.jabberwerx.muc_config_view .muc_config_form {
+    overflow:               auto;
+}
+
+.jabberwerx.muc_config_view .muc_config_buttons {
+    text-align: right;
+    margin:     5px 5px 10px 5px;
+}
+.jabberwerx.muc_config_view .muc_config_buttons input {
+    width:      80px;
+    margin:     4px 5px;
+}
+
+.jabberwerx.muc_config_view .muc_config_error {
+    font-weight:            bold;
+    color:                  #F35000;
+    font-size:              larger;
+}
+
+/* muc config view styles */
+.jabberwerx.muc_search_view {
+    background:             #F1F5FA;
+    border:                 1px solid #8499A2;
+    margin:                 0px;
+    padding:                5px;
+    -moz-border-radius:     2px;
+    -webkit-border-radius:  2px;
+    border-radius:          2px;
+}
+
+.jabberwerx.muc_search_view .muc_search_buttons {
+    text-align: right;
+    margin:     5px 5px 10px 5px;
+}
+.jabberwerx.muc_search_view .muc_search_buttons input {
+    width:      80px;
+    margin:     4px 5px;
+}
+
+.jabberwerx.muc_search_view .muc_search_error {
+    font-weight:            bold;
+    color:                  #F35000;
+    font-size:              larger;
+}
+.jabberwerx.muc_search_view .muc_search_results {
+    border:                 1px solid #8499A2;
+}
+
+
+/* roster styles */
+div.jabberwerx.roster {
+    overflow:   auto;
+    padding:    5px;
+    font-size:  smaller;
+}
+div.jabberwerx.roster .jabberwerx.contact {
+    white-space:    nowrap;
+    overflow:       hidden;
+    margin:         2px;
+}
+div.jabberwerx.roster .jabberwerx.contact .status {
+    display:        block;
+    color:          #8E8E8E;
+}
+
+div.jabberwerx.roster .group.section {
+    background: #feffff;
+    border:     1px solid #53636A;
+    margin:     0px;
+}
+div.jabberwerx.roster .group.section .group.title.hover {
+    background:         #C6F5FE url("../images/backround-roster-group-hover.png") repeat-x top left;
+}
+div.jabberwerx.roster .group.section.single {
+    border:     none;
+}
+div.jabberwerx.roster .group.title {
+    color:              #000000;
+    background:         #C1D0DB url("../images/background-roster-group.png") repeat-x top left;
+    padding:            5px 5px 5px 2px;
+}
+div.jabberwerx.roster .group.title.expanded {
+    border-bottom:      1px solid #53636A;
+}
+
+div.jabberwerx.roster .group.title a {
+    color:              #000000;
+    text-decoration:    none;
+    padding:            0px 4px 0px 14px;
+}
+div.jabberwerx.roster .group.title.collapsed a {
+    background:         url("../images/roster-group-collapsed.png") no-repeat left center;
+}
+div.jabberwerx.roster .group.title.expanded a {
+    background:         url("../images/roster-group-expanded.png") no-repeat left center;
+}
+div.jabberwerx.roster .group.title .extrainfo {
+    float:              right;
+    clear:              none;
+    margin-right:       5px;
+}
+
+.jabberwerx.contact a.contactlink {
+    text-decoration:    none;
+    white-space:        nowrap;
+    overflow:           hidden;
+    width:              90%;
+    color:              #0088C2;
+}
+div.jabberwerx.roster .jabberwerx.contact a.contactlink {
+    color:              #000000;
+    white-space:        nowrap;
+    width:              100%;
+    overflow:           hidden;
+}
+.jabberwerx.contact a.contactlink:hover {
+    text-decoration:    underline;
+}
+
+/* ConsoleView */
+/**
+ * relevant kubrick color map from styling.rst
+ *
+ * Selection 40     #8DB71F     Explicit selections
+ * Interface 05     #F1F5FA     Background color for dialogs
+ * Interface 20     #D9E3E9     Background for content area
+ * Interface 50     #8499A2     Border to most container-oriented components and dialogs
+ * Action 30        #60E4FB     Border to text inputs.   
+ * Alert 50         #F35000     Error messages and validation highlights
+ */
+/**
+ * kuberik toolbar button css that does not work in IE.
+ * included as comment to maintain in vc
+ * 
+ * .jabberwerx.console_view .console_toolbar_btn {
+ *     background:             transparent;
+ *     border:                 1px solid transparent;
+ *     margin:                 3px 0px;
+ *     color:                  #000000;
+ *     height:                 25px;    
+ * }
+ * .jabberwerx.console_view .console_toolbar_btn:hover {
+ *     background:         #C6F5FE url("../images/background-button-hover.png") repeat-x top left;
+ *     border:             1px solid #8499A2;
+ * }
+ * .jabberwerx.console_view .console_toolbar_btn:active {
+ *     background:         #C6F5FE url("../images/background-button-pressed.png") repeat-x top left;
+ *     border:             1px solid #8499A2;
+ * }
+ */
+
+.jabberwerx.console_view {
+    overflow:               visible;
+    margin:                 5px 10px;
+    background:             #D9E3E9;
+    border:                 1px solid #8499A2;
+    -moz-border-radius:     2px;
+    -webkit-border-radius:  2px;
+    border-radius:          2px;
+}
+.jabberwerx.console_view .template {
+    display:                none;
+}
+.jabberwerx.console_view .console_toolbar,
+.jabberwerx.console_view .log_div {
+    margin:                 5px 10px;
+}
+.jabberwerx.console_view .log_div {
+    overflow:           auto;
+    background:         #feffff;
+    border:             1px solid #8499A2;
+}
+.jabberwerx.console_view .console_toolbar {
+    height:                 31px;
+}
+.jabberwerx.console_view .console_toolbar_btn {
+    margin:                 3px 0px;
+    color:                  #000000;
+    height:                 25px;
+}
+.jabberwerx.console_view .active_filters{
+    margin-left: 6px;
+}
+.jabberwerx.console_view textarea {
+    margin:             5px 10px;
+    display:            block;
+    position:           absolute;
+}
+
+/* log table row , common for all message types */
+.jabberwerx.console_view .log_message {    
+}
+.jabberwerx.console_view .log_message .type{
+    font-weight:        bold;
+    color:              black;
+}
+.jabberwerx.console_view .log_message .timestamp{
+    color:              black;
+    margin:             3px 0px;
+}
+.jabberwerx.console_view .log_message .details{
+    margin:             3px;    
+}
+/* specific message type css */
+.jabberwerx.console_view .log_message .details.sent_xml {
+    color:              blue;    
+}
+.jabberwerx.console_view .log_message .details.received_xml {
+    color:              red;    
+}
+.jabberwerx.console_view .log_message .details.jwa_log {
+    color:              green;
+}
+.jabberwerx.console_view .log_message .details.jwa_console {
+    color:              red;
+}
+.jabberwerx.console_view .filter_element {
+    cursor: pointer !important;
+}
+.jabberwerx.console_view .filter_jid {
+    cursor: pointer !important;
+}
+
+/** xmpp 2 html markup **/
+.jabberwerx.console_view .xml_element_name {    
+}
+.jabberwerx.console_view .xml_text {
+    color: black;
+}
+.jabberwerx.console_view .xml_char {
+    color:  black;
+}
+.jabberwerx.console_view .xml_attributes {
+    position: relative;
+}
+.jabberwerx.console_view .xml_attrib {
+}
+.jabberwerx.console_view .xml_first_attrib {
+    display: inline;
+}
+.jabberwerx.console_view .xml_attrib_name {
+}
+.jabberwerx.console_view .xml_attrib_val {
+    color: black;
+}
+.jabberwerx.console_view .xml_element {
+    position: relative;
+}
+.jabberwerx.console_view .xml_child_container {
+    margin-left: 16px;
+    display:    block;
+}

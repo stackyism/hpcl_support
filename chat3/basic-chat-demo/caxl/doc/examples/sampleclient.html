@@ -1,0 +1,705 @@
+<html>
+    <head>
+        <title>Cisco AJAX XMPP Library ~ UI API Sample Client</title>
+        <link rel="stylesheet" href="../../resources/themes/default/css/styles.css"/>
+        <link rel="translation" type="text/javascript" xml:lang="en-US" href="../../resources/translations/TranslationData.en_US.js"/>
+        <link rel="translation" type="text/javascript" xml:lang="fr-FR" href="../../resources/translations/TranslationData.fr_FR.js"/>
+        <link rel="translation" type="text/javascript" xml:lang="ga" href="../../resources/translations/TranslationData.ga.js"/>
+        <link rel="translation" type="text/javascript" xml:lang="he" href="../../resources/translations/TranslationData.he.js"/>
+        <link rel="translation" type="text/javascript" xml:lang="ru" href="../../resources/translations/TranslationData.ru.js"/>
+        <link rel="translation" type="text/javascript" xml:lang="zh" href="../../resources/translations/TranslationData.zh.js"/>
+        <script type="text/javascript" src="../../jabberwerx.ui.js"></script>
+        <script type="text/javascript" src="democon.js"></script>
+        <script type="text/javascript" src="../../jabberwerx.cisco.js"></script>
+
+        <script type="text/javascript">
+            var demo_config = {
+                domain: "hpcl.co.in",
+                maxGraphAge: 5,
+                unsecureAllowed: true,
+                atSymbolAllowed: false,
+                logPersistence: false,
+                serviceDiscoveryEnabled: true,
+                httpBindingURL: "https://10.15.0.10:7335/httpbinding",
+                httpBindingURL_secondary: "https://HPCL-PRESENCE.hpcl.co.in:7335/httpbinding"
+            }
+
+jabberwerx.util.config.logPersistence = demo_config.logPersistence;
+jabberwerx.util.setMaxGraphAge(demo_config.maxGraphAge);
+jabberwerx._config.unsecureAllowed = demo_config.unsecureAllowed;
+jabberwerx._config.httpBindingURL = demo_config.httpBindingURL;
+jabberwerx._config.httpBindingURL_secondary = demo_config.httpBindingURL_secondary;
+jabberwerx._config.serviceDiscoveryEnabled = demo_config.serviceDiscoveryEnabled;
+
+
+sample = {};
+
+sample.IntroView = jabberwerx.ui.JWView.extend({
+    init: function() {
+        this._super();
+    },
+    destroy: function() {
+        this._super();
+    },
+
+    createDOM: function(doc) {
+        var data = $("<div/>", doc).addClass("jabberwerx intro");
+
+        $("<h2/>").appendTo(data).
+                   text("Welcome to Cisco AJAX XMPP Library");
+
+        return data;
+    },
+
+    setTabControl: function(tab) {
+        this._super(tab);
+
+        if (tab) {
+            tab.label("Welcome");
+        }
+    }
+}, "sample.IntroView");
+
+sample.IntroView.mixin(jabberwerx.ui.Tabbable);
+
+    </script>
+    <script type="text/javascript">
+client = null;
+
+$(document).bind("ready", function() {
+    // Check on a locale first...
+    /*var locale = /locale=([^&]+)/.exec(window.location.search);
+    if (locale) {
+        locale = locale[1];
+    }
+    if (locale) {
+        try {
+            jabberwerx.l10n.load(locale);
+        } catch (ex) {
+            jabberwerx.util.debug.log("unable to load " + locale + ": " + ex);
+        }
+    }*/
+    
+    client = new jabberwerx.Client('sampleclient');
+
+    var jwaConsole = new jabberwerx.ui.ConsoleView(client, {parentDOM: $("div.jwa_console")});
+    jwaConsole.render().appendTo($("div.jwa_console"));
+    jwaConsole.dimensions({height: $("div.jwa_console").height(), width: $("div.jwa_console").width()})
+    
+    var roster = client.controllers.roster || new jabberwerx.RosterController(client);
+    var quickContacts = client.controllers.quickContact || new jabberwerx.cisco.QuickContactController(client);
+    roster.autoaccept_in_domain = false;
+    var chat = client.controllers.chat || new jabberwerx.ChatController(client);
+    var muc = client.controllers.muc || new jabberwerx.MUCController(client);
+    
+
+    var jid = new jabberwerx.JID('31919350@hpcl.co.in');
+    var entityCache = new jabberwerx.ClientEntityCache();
+
+    var entity1 = entityCache.entity(jid);
+        if (!entity1) {
+            entity1 = new jabberwerx.TemporaryEntity(jid);
+            entity1.cache = entityCache;
+        }
+
+        var view = new jabberwerx.ui.ContactPresenceView(entity1);
+        view.render().appendTo('#contact-view');
+        //this.views.push(view);
+
+    var auth = new jabberwerx.ui.AuthenticationView(client, demo_config.domain);
+    auth.allowAtSymbol = demo_config.atSymbolAllowed;
+    
+    // bind on the AuthenticationView 'viewRendered' event to
+    // add the in-band register checkbox control
+    auth.event("viewRendered").bind(function(evt){
+        var authForm = evt.source.jq;
+        var div = $("<div/>")
+            .addClass("auth_extra");
+        $("<input type='checkbox'/>")
+            .attr("name","in-band-reg")
+            .appendTo(div);
+        div.append("Create a new account");                
+        authForm.append(div);   
+    });
+    
+    auth.render().appendTo("div.my_auth");
+    
+    // bind the clearing/setting of in-band register flag to 
+    // the in-band register checkbox control
+    $("input:checkbox[name=in-band-reg]").bind("click", function() {
+       if ($(this).get(0).checked) {
+           auth._register = true;
+       } else {
+           auth._register = false;
+       }
+    });
+
+    var prsView = new jabberwerx.ui.SelfPresenceView(client);
+    prsView.allowUnavailable = true;
+    prsView.setStatusChoices(
+            "available",
+            prsView.getStatusChoices("available").concat("Custom..."));
+    prsView.setStatusChoices(
+            "away",
+            prsView.getStatusChoices("away").concat("Custom..."));
+    prsView.setStatusChoices(
+            "xa",
+            [].
+            concat(jabberwerx._("Extended Away")).
+            concat("PTO").
+            concat("Custom..."));            
+    prsView.setStatusChoices(
+            "dnd",
+            prsView.getStatusChoices("dnd").concat("Custom..."));
+    prsView.event("presenceSelected").bind(function(evt) {
+        var view = evt.source;
+        var client = view.client;
+        var data = evt.data;
+
+        if (data.status == "Custom...") {
+            var status = prompt("Enter status message for " + evt.data.show, "");
+
+            if (!status) {
+                view.update();
+                return true;
+            }
+            var choices = view.getStatusChoices(evt.data.show);
+            var pos = jQuery.inArray("Custom...", choices);
+            if (pos > 0) {
+                choices.splice(pos, 0, status);
+            } else if (jQuery.inArray(status, choices) == -1) {
+                choices.push(status);
+            }
+
+            view.setStatusChoices(data.show, choices);
+            data.status = status;
+        }
+
+        return false;
+    });
+
+    prsView.render().appendTo(".my_presence");
+    prsView.update();
+
+    var rosterView = new jabberwerx.ui.RosterView(client.entitySet);
+    rosterView.event("rosterGroupingRendered").bind(function(evt) {
+       if (evt.data.grouping.name != "") {
+           evt.data.grouping.expand();
+       }
+    });
+    rosterView.setDefaultGroupingName("unknown");
+    rosterView.render().prependTo("div.my_roster");
+    rosterView.height(400);
+
+    $("input:checkbox[name=filter_contacts]").bind("click", function() {
+       if ($(this).get(0).checked) {
+           rosterView.addFilter(rosterView.invocation("filterByContacts"));
+       } else {
+           rosterView.removeFilter(rosterView.invocation("filterByContacts"));
+       }
+    });
+    $("input:checkbox[name=filter_active]").bind("click", function() {
+       if ($(this).get(0).checked) {
+           rosterView.addFilter(rosterView.invocation("filterByActive"));
+       } else {
+           rosterView.removeFilter(rosterView.invocation("filterByActive"));
+       }
+    });
+
+    /*var democonview = new jabberwerx.ui.ContactDemo();
+    democonview.render().appentTo("div.contact-view");
+    $('div.contact-view').hide();*/
+
+    var tabbedView = new jabberwerx.ui.TabbedView();
+    tabbedView.render().appendTo("div.my_tabs");
+    tabbedView.dimensions({width: 400, height: 200});
+    tabbedView.addTab("introview", new sample.IntroView());
+    var sendMediated = true;
+    
+    tabbedView.event("tabActivated").bind(function(evt) {
+        var id = evt.data.id;
+        $("input.remove_contact_btn").
+            unbind("click").
+            attr("disabled", "true").
+            val("Remove Contact");            
+        $("input.room_invite").
+            unbind("click").
+            attr("disabled", "true").
+            val("Room Invite");            
+        $("input.remove_quick_contact_btn").
+            unbind("click").
+            attr("disabled", "true").
+            val("Remove Quick Contact");                
+        $("input.room_config").
+            unbind("click").
+            attr("disabled", "true").
+            val("Room Config");                       
+        var session = evt.data.content.session;
+        if (session) {
+            if (session.getEntity() instanceof jabberwerx.Contact) {
+                $("input.remove_contact_btn").
+                    removeAttr("disabled").
+                    val("Remove " + session.getEntity().getDisplayName()).
+                    unbind("click").
+                    click(function() {
+                        session.getEntity().remove();
+                        chat.closeSession(session.jid);
+                        $("input.remove_contact_btn").
+                            unbind("click").
+                            attr("disabled", "true").
+                            val("Remove Contact");
+                        tabbedView.removeTab(id);
+                    });
+                    
+            }        
+        } else {
+            room = evt.data.content._MucRoom;
+            if (room) {
+                $("input.room_invite").
+                    removeAttr("disabled").
+                    val("Invite To " + room.getDisplayName()).
+                    unbind("click").
+                    click(function() {
+                        var ijid = prompt("Enter the invitee jid:", "");
+                        var sentjids = room.invite([ijid], '', sendMediated);                        
+                        var msg = 'Sent invite to ';
+                        if (sentjids.length == 0) {
+                            var msg = 'Could not send invite to "' + ijid + '".';
+                        } else {
+                            var msg = 'Sent invite to ' + sentjids[0] + ' using ' + (sendMediated ? 'mediated':'direct') + ' method.';                            
+                        }
+                        jabberwerx.util.debug.log(msg);
+                        sendMediated = !sendMediated;                        
+                    });
+                    
+                $("input.room_config").
+                    removeAttr("disabled").
+                    val("Configure " + room.getDisplayName()).
+                    unbind("click").
+                    click(function() {
+                        $("<div/>"). 
+                            attr("id", room.getDisplayName()).
+                            appendTo("div.muc_configs");  
+                        var configView = new jabberwerx.ui.MUCConfigView(room);
+                        configView.event("viewRemoved").bind(function(evt) {
+                            if (evt.data.get(0).jw_view.room.getDisplayName()) {
+                                $("#" + evt.data.get(0).jw_view.room.getDisplayName()).remove();
+                            }
+                        });                        
+                        configView.render().appendTo("div.muc_configs");
+                        configView.dimensions({width:600, height:480});
+                    });
+                    
+            }
+        }
+    });
+
+    
+
+    roster.event("subscriptionReceived").bind(function(evt) {
+        if (evt.data.handled) {
+            return false;
+        }
+
+        var contact = evt.data.stanza.getFromJID();
+        var subView = new jabberwerx.ui.SubscriptionView(roster, contact, {group: "Demo Group"});
+        subView.render().appendTo("div.my_subscriptions");
+        subView.update();
+
+        subView.event("actionComplete").bind(function() {
+            subView.destroy();
+        });
+    });
+
+    chat.event("chatSessionOpened").bind(function(evt) {
+        var session = evt.data.chatSession;
+        var id = "chat11:" + session.jid;
+        var tab = tabbedView.getTab(id);
+        if (!tab) {
+            tab = tabbedView.addTab(id, new jabberwerx.ui.ChatView(session));
+        }
+    });
+
+    rosterView.event("rosterItemSelected").bind(function(evt) {
+        var item = evt.data.item;
+        var entity = item.entity;
+        if (entity instanceof jabberwerx.Contact) {
+            var id = "chat11:" + entity.jid.getBareJIDString();
+            var session = chat.openSession(entity.jid);
+            var tab = tabbedView.getTab(id);
+
+            if (tab) {
+                tab.activate();
+            }
+        } else if (entity instanceof jabberwerx.MUCRoom) {
+
+            var cbs = {
+                successCallback: function() {
+                    tab.show();
+                    tab.activate();
+                },
+                errorCallback: function(err, aborted) {
+                    tab.destroy();
+                    room.destroy();
+                    if (!aborted) {
+                        alert("A problem occurred while trying to enter the room.\n" +
+                                " Details: " + jabberwerx.errorReporter.getMessage(err.getNode()));                   
+                    }
+                }                    
+            }
+        
+            var id = "muc:" + entity.jid;
+            var room = muc.room(entity.jid);
+            var tab = tabbedView.getTab(id);
+            if (!tab) {
+                tab = tabbedView.addTab(id, new jabberwerx.ui.MucView(room));
+                tab.hide();
+            }
+            try {
+                room.enter(jabberwerx.JID.unescapeNode(client.connectedUser.jid.getNode()), cbs);
+            } catch (ex) {
+                //todo this is probably a roomactiveerror, an attempt to enter a room already in an enter attempt. do something
+                jabberwerx.util.debug.log("Exception during room entry via roster: " + ex);
+            }            
+        } else {
+            alert("selected via " + evt.data.type + ": " + evt.data.item.entity);
+            return;
+        }
+
+    });
+
+    client.event("clientStatusChanged").bind(function(evt) {
+        if (evt.data.next == jabberwerx.Client.status_connected) {
+            auth.hide();
+            $(".my_client").show();
+            tabbedView.show();
+            var rooms = ["testroom1@conference." + demo_config.domain,
+                         "testroom2@conference." + demo_config.domain];
+            jQuery.each(rooms, function() {
+                var rjid = String(this);
+                var room = muc.room(rjid);
+            });
+            prsView.update();
+            rosterView.update();
+            tabbedView.update();
+            //view.update();
+        } else if (evt.data.next == jabberwerx.Client.status_disconnected) {
+            jQuery.each(tabbedView.getAllTabs(), function() {
+                if (this.id != "introview") {
+                    this.destroy();
+                } else {
+                    this.activate();
+                }
+            });
+            tabbedView.hide();
+            auth.show();
+            // reset the in-band registration control & flag
+            $("input:checkbox[name=in-band-reg]").attr("checked",false);
+            auth._register = false;
+            $(".my_client").hide();
+        }
+    });
+    
+    muc.event("mucInviteReceived").bind(function(evt) {
+        
+        // Create new MUCInviteView with the MUCInvite received
+        var mucInvite = evt.data;
+        var mucInviteView = new jabberwerx.ui.MUCInviteView(muc, mucInvite);
+        mucInviteView.render().appendTo("div.muc_invites");
+        mucInviteView.update();
+        
+        // Set up tab for room now so that, upon joining, if messages from this room are received
+        // they aren't missed.
+        var room = muc.room(mucInvite.getRoom());
+        var id = "muc:" + room.jid;
+        var tab = tabbedView.getTab(id);
+        
+        if (!tab) {
+            tab = tabbedView.addTab(id, new jabberwerx.ui.MucView(room));
+            tab.hide();
+        }
+
+        // Destroy the MUCInviteView when an action is completed
+        mucInviteView.event("actionComplete").bind(function(evtObj) {
+            mucInviteView.destroy();
+            if (evtObj.data.action == jabberwerx.ui.MUCInviteView.ACTION_JOIN) {
+                var err = evtObj.data.error;
+                if (err) {
+                    tab.destroy();
+                    room.destroy();
+					alert("A problem occurred while trying to enter the room.\n" +
+						" Details: " +
+						jabberwerx.errorReporter.getMessage(err.getNode()));
+                } else {
+                    tab.show();
+                    tab.activate();
+                }
+            } else {
+                tab.destroy();
+                room.destroy();
+            }
+        });
+    });
+
+    $("input.room_search").click(function() {
+        var roomSearch = new jabberwerx.ui.MUCSearchView(muc,
+            "conference." + demo_config.domain);
+
+        roomSearch.event("actionComplete").bind(function(evt) {
+            try {
+                var room = evt.data.submitted;
+                var id = "muc:" + room.jid;
+                var tab = tabbedView.getTab(id);
+                if (!tab) {
+                    tab = tabbedView.addTab(id, new jabberwerx.ui.MucView(room));
+                    tab.hide();
+                }
+
+                //enter room callbacks
+                var cbs = {
+                    successCallback: function() {
+                        tab.show();
+                        tab.activate();
+                    },
+                    errorCallback: function(err, aborted) {
+                        tab.destroy();
+                        //cleanup partially entered room
+                        room.destroy(); 
+                        if (!aborted) {
+                            alert("A problem occurred while trying to enter the room.\n" +
+                                " Details: " +
+                                jabberwerx.errorReporter.getMessage(err.getNode()));
+                        }
+                    }                    
+                }
+                
+                room.enter(jabberwerx.JID.unescapeNode(client.connectedUser.jid.getNode()),cbs);
+            } catch (e) {
+                alert("An exception occurred while trying to create/join the MUC room.\n Details: " +
+                        e.message);
+            }
+
+            // Removes the MUC Search window.
+            roomSearch.destroy();
+        });
+
+        roomSearch.render().appendTo(".muc_search");
+        roomSearch.dimensions({width:600, height:480});                   
+    });
+
+    $("input.enter_room_btn").click(function() {
+        var roomName = prompt("Enter the room name:", "");
+        if (roomName) {
+            try {
+                var tjid = jabberwerx.JID.asJID(roomName);
+                if (tjid.getNode() == '') {
+                    tjid = jabberwerx.JID.asJID(roomName + "@conference." + demo_config.domain);
+                }
+                var room = muc.room(tjid.toString());
+                var id = "muc:" + room.jid;
+                var tab = tabbedView.getTab(id);
+                if (!tab) {
+                    tab = tabbedView.addTab(id, new jabberwerx.ui.MucView(room));
+                    tab.hide();
+                }
+                //enter room callbacks
+                var cbs = {
+                    successCallback: function() {
+                        tab.show();
+                        tab.activate();
+                    },
+                    errorCallback: function(err, aborted) {
+                        tab.destroy();
+                        //cleanup partially entered room
+                        room.destroy(); 
+                        if (!aborted) {
+                            alert("A problem occurred while trying to enter the room.\n" +
+                                    " Details: " + jabberwerx.errorReporter.getMessage(err.getNode()));                   
+                        }
+                    }                    
+                }
+                //define configure if not using default
+                if  (!$("input:checkbox[name=default_config]").get(0).checked) {
+                    cbs.configureCallback = function() {
+                         $("<div/>"). 
+                            attr("id", room.getDisplayName()).
+                            appendTo("div.muc_configs");  
+                        var configView = new jabberwerx.ui.MUCConfigView(room);
+                        configView.event("viewRemoved").bind(function(evt) {
+                            if (evt.data.get(0).jw_view.room.getDisplayName()) {
+                                $("#" + evt.data.get(0).jw_view.room.getDisplayName()).remove();
+                            }
+                        });                        
+                        configView.render().appendTo("div.muc_configs");
+                        configView.dimensions({width:600, height:480});                   
+                    }
+                }
+
+                room.enter(jabberwerx.JID.unescapeNode(client.connectedUser.jid.getNode()),cbs);
+            } catch (e) {
+                alert("An exception occurred while trying to create/join the MUC room.\n Details: " +
+                        e.message);
+            }
+        }
+    });
+
+    $("input.add_contact_btn").click(function() {
+        var contact = prompt("Enter new contact jid: ", "");
+        if (contact) {
+            // If a QuickContact entity already exists then clear its groups
+            var entity = client.entitySet.entity(contact);
+            if (entity instanceof jabberwerx.cisco.QuickContact) {
+                entity.setGroups(null);
+            }
+            try {
+                roster.addContact(contact);
+            } catch(e) {
+                alert("A problem occurred while trying to add the contact " + contact +
+                        ".\n Details: " + e.message);
+            }
+        }
+    });
+
+    $("input.add_quick_contact_btn").click(function() {
+        var contact = prompt("Enter quick contact jid: ", "");
+        if (contact) {
+            try {
+                quickContacts.subscribe(contact);
+                var entity = client.entitySet.entity(contact);
+                if (entity && entity instanceof(jabberwerx.cisco.QuickContact)) {
+                     entity.setGroups("Quick Contacts");
+                }
+            } catch(e) {
+                alert("A problem occurred while trying to add quick contact " + contact +
+                        ".\n Details: " + e.message);
+            }
+        }
+    });
+
+    $("div.my_client").hide();
+});
+        </script>
+        <style type="text/css">
+body {
+    font-family:    Arial,Helvetica;
+    font-size:      12px;
+    background:     #8E8E8E;
+}
+div.my_auth {
+    width:  325px;
+    margin: 0px auto;
+}
+div.my_client {
+    position: relative;
+}
+div.explorator {
+    float:      left;
+    left:       5px;
+    top:        5px;
+    width:      240px;
+    clear:      none;
+}
+div.composition {
+    margin-left:    250px;
+}
+div.my_tabs {
+    position:       relative;
+}
+div.my_actions {
+    padding-top:     430px;
+}
+input.option_btn {
+    min-width:  120px;
+}
+input.remove_btn {
+    width:  200px;
+}
+div.my_subscriptions {
+    position:       absolute;
+    top:            4px;
+    right:          4px;
+    background:     #f0f0f0;
+}
+
+div.muc_invites {
+    position:       absolute;
+    top:            4px;
+    right:          4px;
+    background:     #f0f0f0;
+}
+div.muc_configs {
+    position:       absolute;
+    top:            4px;
+    right:          4px;
+    background:     #f0f0f0;
+}
+
+div.muc_search {
+    position:       absolute;
+    top:            4px;
+    right:          4px;
+    background:     #f0f0f0;
+}
+
+span.bordered {
+    border:     1px solid #000099;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right: 3px;
+}
+
+div.jwa_console {
+    height:     300px;
+    width:      100%;
+    margin:     0px auto;
+}
+        </style>
+
+    </head>
+    <body>
+        <h2>UI API Sample Client</h2>
+        <div class="my_auth"></div>
+        <div class="my_client">
+            <div class="explorator">
+                <div class="my_presence"></div>
+                <div class="my_roster">
+                    <div id="roster_filters">
+                        <div><input type='checkbox' name='filter_contacts'/> Contacts only</div>
+                        <div><input type='checkbox' name='filter_active'/> Active only</div>
+                    </div>
+                </div>
+            </div>
+            <div class="composition">
+                <div class="my_tabs"></div>
+                
+                <div class="contact-view" align='right'> <h4>Demo Contact Presence View</h4></div>
+            </div>
+            <div class="my_actions">
+                <input type="button" class="option_btn add_contact_btn" value="Add Roster Contact"/>
+                <input type="button" class="option_btn add_quick_contact_btn" value="Add Quick Contact"/>
+                <input type="button" class="remove_btn remove_contact_btn" value="Remove Contact" disabled="true"/>
+                <div class="room-actions">
+                    <input type="button" class="option_btn room_invite" value="Invite to Room" disabled="true"/>
+                    <input type="button" class="option_btn room_config" value="Configure Room" disabled="true"/>
+                    <input type="button" class="option_btn room_search" value="Search for Room"/>
+                    <span class="bordered">
+                        <input type="button" class="option_btn enter_room_btn" value="Enter Room"/>
+                        <input type='checkbox' name='default_config'/>
+                        Default configuration
+                    </span>
+                </div>
+            </div>
+            <div class="my_subscriptions"></div>
+            <div class="muc_invites"></div>
+            <div class="muc_configs"></div>
+            <div class="muc_search"></div>
+        </div>
+          <!--
+             Note: ConsoleView may cause performance problems when working
+                   with many, or large, stanzas. This view should not be used in
+                   "production" clients and is provided as a convenient
+                   debugging tool.
+        -->
+        <div class="jwa_console"></div>
+    </body>
+</html>

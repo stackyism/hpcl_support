@@ -1,0 +1,78 @@
+<html>
+
+	<head>
+		<style type="text/css">
+		#flip {
+    		position: absolute;
+    		z-index: 11;
+		}
+		#flip .front,
+		#flip .back {
+    		border-radius: 105px;
+    		background: lightblue;
+    		width: 105px;
+    		height: 105px;
+    		display: block;
+    		position: absolute;
+
+    		color: #fff;
+		}
+		#flip .front {
+    		z-index: 13;
+		}
+		#flip .back {
+    		z-index: 12;
+    		background: lightgreen;
+		}
+
+		#flip {
+    		perspective: 300px;
+    		transform-style: preserve-3d;
+		}
+
+		#flip .front {
+        	transform: rotateX(0deg);
+        	backface-visibility: hidden;
+		}
+		#flip .back {
+        	transform: rotateX(-180deg);
+        	backface-visibility: hidden;
+		}
+
+		#flip:hover .front {
+    		transform: rotateX(180deg);
+		}
+		#flip:hover .back {
+   			transform: rotateX(0deg);
+    		z-index: 14;
+		}
+
+		#flip .front,
+		#flip .back {
+    		transition: transform .5s ease-in-out;
+		}
+		div.contact
+		{
+			position: absolute;
+			padding-left: 30px;
+			margin-top: 35px;
+			color: red;
+		}
+		#flip
+		{
+			padding-left: 40px;
+			position: absolute;
+			padding-top: 50px;
+		}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="flip">
+    	<div class="front"></div>
+    	<div class="back"><div class='contact'><a href="basic-chat-demo/caxl/doc/examples/persistcontactdemo.html">Contact</a></div></div>
+		</div>
+
+	</body>
+</html>

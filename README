@@ -1,0 +1,4 @@
+This is the project was aimed at making a basic support page for HPCL (Hindustan Petroleum Corporation Limited), as an Internship Project for summer2013 @HPCL.
+It was made with the help of Cisco Jabber Web APIs as the software was already available.
+The APIs used were jabberwerx.js and jabberwerx.ui.js.
+The project can be viewed from support.html.

@@ -1,0 +1,91 @@
+<html>
+
+
+<head>
+
+		<title>Cisco AJAX XMPP Library ~ Persistent Contact</title>
+        <link rel="stylesheet" href="caxl/resources/themes/default/css/styles.css" type="text/css" media="screen" />        
+        <script type="text/javascript" src="caxl/jabberwerx.ui.js"></script>
+        <script type="text/javascript">
+        function init () {
+        	// body...
+        	var demo_config = {
+    		user: "33333330",
+    		password: "Hpcl@123",
+    		domain: "hpcl.co.in",
+    		maxGraphAge: 30,
+    		unsecureAllowed: false,
+    		logPersistence: false
+			};
+
+			jabberwerx.util.config.logPersistence = demo_config.logPersistence;
+			jabberwerx.util.setMaxGraphAge(demo_config.maxGraphAge);
+			jabberwerx._config.unsecureAllowed = demo_config.unsecureAllowed;
+			
+        
+        	//_super(); 
+        	cache = null;
+        	rosterFetched = false;
+        	client = new jabberwerx.Client('sampleclient');
+        	rosterController = new jabberwerx.RosterController(this.client);
+        	views = [];
+        
+        	//client.entitySet.event("batchUpdateEnded").bind(this.invocation("onRosterFetch"));
+        	entities = null; //eventually populated after roster fetch
+        
+        	//var that = this;
+        
+        	var onConnected = function() {};        
+        	var onClientError = function() { alert('error: ' + that.client.getClientStatusString(that.client.clientState)); };
+        
+        	var connectArgs = {
+            // the proxy url to the BOSH server
+            httpBindingURL: 'https://10.15.0.10:7335/httpbinding',
+            // onConnected is the success callback method
+            successCallback: onConnected,
+            // onClientError is the error callback method
+            errorCallback: onClientError
+        	};
+        
+        	//connect on creation 
+        	try {
+            	this.client.connect(demo_config.user + "@" + demo_config.domain, demo_config.password, connectArgs);
+        	} catch (ex) {
+            	jabberwerx.util.debug.log("error authenticating: " + ex + " ::: " + (ex.stack || ""));
+        	}
+        	jabberwerx.$.each(this.views, function() {
+            	this.render().appendTo('#contact-view');
+        	});
+        	var jid = new jabberwerx.JID('31919350@hpcl.co.in');
+        	var entityCache = new jabberwerx.ClientEntityCache();
+        	var entity = entityCache.entity(jid);
+        	if (!entity) {
+            	entity = new jabberwerx.TemporaryEntity(jid);
+            	entity.cache = entityCache;
+        	}
+        	var view = new jabberwerx.ui.ContactPresenceView(entity);
+        		view.render().appendTo('#contact-view');
+        		this.views.push(view);
+        		//entity.destroy();
+        	}
+
+
+
+        </script>
+</head>
+
+
+
+
+
+
+
+<body>
+		<h4>Demo Contact Presence View</h4>
+        <div id="contact-view"></div>
+        <div id='button'>
+        	<button id='openchat' onclick='init()'>click to initiate</button>
+        </div>
+</body>
+
+</html>

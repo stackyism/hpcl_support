@@ -1,0 +1,459 @@
+/*=============================================================================
+//
+// License
+//  
+// The contents of this file are subject to the Jabber Commercial Software
+// License (the "License").  You may not copy or use this file, in either 
+// source code or executable form, except in compliance with the License.  
+// You may obtain a copy of the License by contacting Jabber.com, Inc. at 
+// http://www.jabber.com/.
+//  
+// Copyrights
+//  
+// Portions created by or assigned to Jabber.com, Inc. are 
+// Copyright (c) 2001-2011 Jabber, Inc. All Rights Reserved
+//  
+//=============================================================================*/
+
+/* jabberwerx.ui default style sheet */
+/* tabbed pane styles */
+.jabberwerx.tabpane {
+    position:       relative;
+    border:         2px solid #000099;
+    background:     #cccccc;
+    padding:        2px 4px 4px 2px;
+}
+
+.jabberwerx.tabpane .tabcontent {
+    position:       absolute;
+    top:            2px;
+    left:           2px;
+    margin:         0px;
+    padding:        4px;
+    background:     #f0f0f0 url("../images/tab-background.png") bottom left repeat-x;
+    border:         1px solid #999999;
+}
+.jabberwerx.tabpane .tabcontent .tabdata {
+    position:       absolute;
+    top:            4px;
+    left:           4px;
+}
+
+.jabberwerx.tabpane .tablist {
+    position:       absolute;
+    top:            2px;
+    right:          2px;
+    margin:         0px 2px 0px 0px;
+    padding:        0px;
+    vertical-align: top;
+    overflow-x:     hidden;
+    overflow-y:     auto;
+    border-left:    none;
+}
+
+.jabberwerx.tabpane .tablist .tab {
+    position:           relative;
+    margin:             0px;
+    padding:            1px 4px;
+    border:             1px solid #999999;
+    border-right:       2px solid #999999;
+    height:             24px;
+    cursor:             pointer;
+    overflow:           hidden;
+    display:            block;
+    font-size:          12pt;
+}
+.jabberwerx.tabpane .tablist .tab .notification {
+    float:              right;
+}
+.jabberwerx.tabpane .tablist .tab.attn {
+    background:         #ff4d00;
+}
+.jabberwerx.tabpane .tablist .tab .closer {
+    position:       absolute;
+    right:          4px;
+    top:            3px;
+    top:            4px;
+    cursor:         pointer;
+    vertical-align: middle;
+    margin-top:     2px;
+}
+.jabberwerx.tabpane .tablist .tab a.tab_link {
+    text-decoration:    none;
+    white-space:        nowrap;
+    width:              85%;
+    overflow:           hidden;
+    display:            block;
+}
+.jabberwerx.tabpane .tablist .tab.active {
+    background: #f0f0f0;
+    border-left: 1px solid #f0f0f0;
+}
+
+/* presence-related styles */
+.presence.show.chat {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-chat.png");
+}
+.presence.show.available {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-available.png");
+}
+.presence.show.away {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-away.png");
+}
+.presence.show.xa {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-xa.png");
+}
+.presence.show.dnd {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-dnd.png");
+}
+.presence.show.unavailable {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-unavailable.png");
+}
+.presence.show.unknown {
+    padding:                4px;
+    padding-left:           24px;
+    background-repeat:      no-repeat;
+    background-position:    2px 2px;
+    background-image: url("../images/icon-presence-unknown.png");
+}
+
+/* authentication view styles */
+.jabberwerx.auth_form label {
+    display: block;
+    float: left;
+    width: 150px;
+    padding: 0;
+    margin: 5px 0 0;
+    text-align: right;
+}
+.jabberwerx.auth_form {
+    margin: 0;
+    padding: 0;
+}
+.jabberwerx.auth_form input, .jabberwerx.auth_form textarea {
+    margin: 5px 0 0 10px;
+}
+.jabberwerx.auth_form .auth_status {
+    color: red;
+}
+.jabberwerx.auth_form .auth_status_div {
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.jabberwerx.mucview .jabberwerx.roster {
+    float: left;
+    border: 1px solid #0000c0;
+    background: #c0c0c0;
+    margin:     4px 2px;
+}
+.jabberwerx.mucview .jabberwerx.chatview {
+    float: right;
+}
+
+/* chat view */
+.jabberwerx.chatview {
+    overflow-x:     hidden;
+    overflow-y:     hidden;
+}
+.jabberwerx.chatview .chat_wrapper {
+    border:         1px solid #0000c0;
+    margin:         0px;
+    position:       relative;
+    overflow-x:     hidden;
+    overflow-y:     hidden;
+}
+.jabberwerx.chatview .chat_incoming {
+    background:     #ffffff;
+    overflow-x:     auto;
+    overflow-y:     scroll;
+}
+.jabberwerx.chatview .chat_incoming .messageView.error {
+    color:              #ff0000;
+}
+.jabberwerx.chatview .chat_badge {
+    position:           absolute;
+    bottom:             0px;
+    text-align:         center;
+    width:              100%;
+    background-color:   #f0f0f0;
+    color:              #6f6f6f;
+}
+.jabberwerx.chatview .chat_input_wrapper {
+    position:       relative;
+    height:         56px;
+    margin:         2px 0px;
+}
+.jabberwerx.messageView.xep245_presentation {
+    font-style: italic;
+}
+.chat_input_wrapper textarea.chat_input {
+    position: absolute;
+    border: 1px solid #0000c0;
+    margin: 0px;
+    padding: 0px;
+    resize: none;
+    background: #ffffff url("../images/textarea-corner.png") bottom right no-repeat;
+}
+.chat_input_wrapper .send_button {
+    position:           absolute;
+    background-color:   #c0c0c0;
+    border:             1px solid #0000c0;
+    color:              #000000;
+    text-decoration:    none;
+    display:            block;
+    line-height:        50px;
+    text-align:         center;
+    width:              50px;
+    height:             50px;
+    cursor:             pointer;
+}
+.chat_input_wrapper .send_button:active {
+    background-color: #F0F0F0;
+}
+
+/* subscription view styles */
+.jabberwerx.subscription_view {
+    margin: 0;
+    padding: 0;
+    border: 2px solid;
+    width: 305;
+}
+.jabberwerx.subscription_view label {
+    display: inline;
+    float: left;
+    width: 100px;
+    padding: 0;
+    margin-top: 5px;
+    text-align: right;
+}
+.jabberwerx.subscription_view .contact,
+.jabberwerx.subscription_view .nick,
+.jabberwerx.subscription_view .group_select,
+.jabberwerx.subscription_view .group_input {
+    margin: 5px 0 0 10px;
+    width: 150px;
+}
+.jabberwerx.subscription_view .contact_div,
+.jabberwerx.subscription_view .nick_div,
+.jabberwerx.subscription_view .group_div,
+.jabberwerx.subscription_view .action_div {
+    margin: 5px 0;
+}
+.jabberwerx.subscription_view .action_button {
+    width: 80px;
+    margin: 5px 0 0 10px
+}
+.jabberwerx.subscription_view .accept {
+    margin-left: 20px;
+}
+.jabberwerx.subscription_view .ignore {
+    margin-right: 20px;
+}
+
+/* muc invite view styles */
+.jabberwerx.muc_invite_view {
+    margin: 0;
+    padding: 0;
+    border: 2px solid;
+    width: 305;
+}
+.jabberwerx.muc_invite_view label {
+    display: inline;
+    float: left;
+    width: 100px;
+    padding: 0;
+    margin-top: 5px;
+    text-align: right;
+}
+.jabberwerx.muc_invite_view .room,
+.jabberwerx.muc_invite_view .invitor,
+.jabberwerx.muc_invite_view .reason,
+.jabberwerx.muc_invite_view .nick {
+    margin: 5px 0 0 10px;
+    width: 150px;
+}
+.jabberwerx.muc_invite_view .room_div,
+.jabberwerx.muc_invite_view .invitor_div,
+.jabberwerx.muc_invite_view .reason_div,
+.jabberwerx.muc_invite_view .nick_div {
+    margin: 5px 0;
+}
+.jabberwerx.muc_invite_view .action_button {
+    width: 120px;
+    margin: 5px 0 5px 20px;
+}
+.jabberwerx.muc_invite_view .join {
+    margin-left: 20px;
+}
+.jabberwerx.muc_invite_view .ignore {
+    margin-right: 20px;
+}
+.jabberwerx.muc_invite_view .error_msg {
+    color: red;
+    margin: 5px 0 5px 20px;
+}
+
+/* x data form view styles */
+.jabberwerx.xdata_form_view {
+    overflow: auto;
+    border: solid black;
+    background-color: #ccc;
+}
+
+.jabberwerx.xdata_form_view .title 
+{
+	font-size:x-large;
+	font-weight:bold;
+}
+
+.jabberwerx.xdata_form_view .instr 
+{
+	font-style:italic;
+}
+
+.jabberwerx.xdata_form_view .field_label {
+    width:40%;
+    vertical-align:top;
+}
+.jabberwerx.xdata_form_view .field_value {
+    width:60%;
+    vertical-align:top;
+}
+
+.jabberwerx.xdata_form_view .line-multi 
+{
+	overflow:auto;
+	width:99%;
+}
+
+.jabberwerx.xdata_form_view .line-single 
+{
+	width:99%;
+}
+
+.jabberwerx.xdata_form_view .list-single 
+{
+	width:99%;
+}
+
+.jabberwerx.xdata_form_view .list-multi 
+{
+	width:99%;
+}
+
+/* muc config view styles */
+.jabberwerx.muc_config_view {
+    border: solid black;
+}
+
+.jabberwerx.muc_config_view .muc_config_buttons
+{
+    text-align: right;
+}
+
+.jabberwerx.muc_config_view .muc_config_error
+{
+    border:   1px solid black;
+}
+
+/* muc config view styles */
+.jabberwerx.muc_search_view {
+    border: solid black;
+}
+
+.jabberwerx.muc_search_view .muc_search_buttons
+{
+    text-align: right;
+}
+
+.jabberwerx.muc_search_view .muc_search_error
+{
+    border:   1px solid black;
+}
+
+.jabberwerx.muc_search_view .muc_search_results table.result_table
+{
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+
+.jabberwerx.muc_search_view .muc_search_results .result_table td,th
+{
+    border: 2px solid black;
+}
+
+.jabberwerx.muc_search_view .muc_search_results .result_table tr.selected
+{
+    background-color: yellow;
+}
+
+/* roster styles */
+div.jabberwerx.roster {
+    overflow:   auto;
+}
+div.jabberwerx.roster .jabberwerx.contact {
+    white-space:    nowrap;
+    overflow:       hidden;
+    margin:         2px;
+}
+.group.section {
+    border:     1px solid #000099;
+    margin:     2px;
+}
+.group.section.single {
+    border:     none;
+    margin:     3px;
+}
+.group.title {
+    color:              #ffffff;
+    background:         #000099;
+    padding:            2px 2px;
+}
+.group.title a {
+    color:              #ffffff;
+    text-decoration:    none;
+    padding:            0px 4px;
+}
+.group.title .extrainfo {
+    float:              right;
+    clear:              none;
+}
+.jabberwerx.contact a.contactlink {
+    text-decoration:    none;
+    white-space:        nowrap;
+    overflow:           hidden;
+    width:              90%
+}
+div.jabberwerx.roster .jabberwerx.contact a.contactlink {
+    text-decoration:    none;
+    color:              #000000;
+    white-space:        nowrap;
+    width:              100%;
+    overflow:           hidden;
+}

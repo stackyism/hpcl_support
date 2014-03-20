@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <link rel="stylesheet" href="../third_party/qunit/testsuite.css" type="text/css" media="screen" />
+
+  <!-- setup script(s) -->
+  <script type="text/javascript">
+defaults = {
+    userPrefix: "jwtest",
+    domain: "example.com",
+    password: "test",
+    httpBindingURL: "/httpbinding"
+};
+
+function testUserJID(index) {
+    if (index === undefined) {
+        index = 0;
+    }
+
+    return new jabberwerx.JID({
+        node: defaults.userPrefix + index,
+        domain: defaults.domain
+    });
+}
+  </script>
+
+  <!-- Source script(s) -->
+  <script src="../../jabberwerx.ui.js"></script>
+  <script src="../../jabberwerx.cisco.js"></script>
+  <!-- Test script(s) -->
+
+  <script src="jabberwerx/model/StreamTest.js"></script>
+  <script src="jabberwerx/model/ClientTest.js"></script>
+  <script src="jabberwerx/model/FullClientTest.js"></script>
+  <script src="jabberwerx/controller/PrivacyListControllerTest.js"></script>
+  <script src="jabberwerx/controller/RosterControllerTest.js"></script>
+  <script src="jabberwerx/controller/MUCControllerTest.js"></script>
+  <script src="jabberwerx/controller/PubSubControllerTest.js"></script>
+</head>
+<body>
+<script type="text/javascript" src="../third_party/qunit/testrunner.js"></script>
+ <h2 id="banner"></h2>
+ <h2 id="userAgent"></h2>
+ <ol id="tests"></ol>
+ <div id="main"></div>
+</body>
+</html>

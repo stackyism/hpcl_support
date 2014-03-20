@@ -1,0 +1,211 @@
+<html>
+    <head>
+        <!--    * THIS SAMPLE APPLICATION AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY
+        * OF ANY KIND BY CISCO, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
+        * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY FITNESS FOR A PARTICULAR
+        * PURPOSE, NONINFRINGEMENT, SATISFACTORY QUALITY OR ARISING FROM A COURSE OF
+        * DEALING, LAW, USAGE, OR TRADE PRACTICE. CISCO TAKES NO RESPONSIBILITY
+        * REGARDING ITS USAGE IN AN APPLICATION, AND IT IS PRESENTED ONLY AS AN
+        * EXAMPLE. THE SAMPLE CODE HAS NOT BEEN THOROUGHLY TESTED AND IS PROVIDED AS AN
+        * EXAMPLE ONLY, THEREFORE CISCO DOES NOT GUARANTEE OR MAKE ANY REPRESENTATIONS
+        * REGARDING ITS RELIABILITY, SERVICEABILITY, OR FUNCTION. IN NO EVENT DOES
+        * CISCO WARRANT THAT THE SOFTWARE IS ERROR FREE OR THAT CUSTOMER WILL BE ABLE
+        * TO OPERATE THE SOFTWARE WITHOUT PROBLEMS OR INTERRUPTIONS. NOR DOES CISCO
+        * WARRANT THAT THE SOFTWARE OR ANY EQUIPMENT ON WHICH THE SOFTWARE IS USED WILL
+        * BE FREE OF VULNERABILITY TO INTRUSION OR ATTACK. THIS SAMPLE APPLICATION IS
+        * NOT SUPPORTED BY CISCO IN ANY MANNER. CISCO DOES NOT ASSUME ANY LIABILITY
+        * ARISING FROM THE USE OF THE APPLICATION. FURTHERMORE, IN NO EVENT SHALL CISCO
+        * OR ITS SUPPLIERS BE LIABLE FOR ANY INCIDENTAL OR CONSEQUENTIAL DAMAGES, LOST
+        * PROFITS, OR LOST DATA, OR ANY OTHER INDIRECT DAMAGES EVEN IF CISCO OR ITS
+        * SUPPLIERS HAVE BEEN INFORMED OF THE POSSIBILITY THEREOF.-->
+
+<!--    This example demonstrates the steps for creating a very basic chat client that can connect to the CUP server, and send and receive messages.
+        The code below demonstrates:
+        -how to create the chat client object
+        -how to connect to the CUP server
+        -how to bind to the clientStatusChanged and messageReceived events of the jabberwerx client
+        -how to send a message
+
+        Before you begin, you will need to have:
+        -access to a Cisco Unified Presence Server
+        -a username and password for two accounts on the Cisco Unified Presence Server
+        -the domain name for the Cisco Unified Presence server. This can be determined by examining the administration screens on the CUP server.
+        -Cisco Unified Presence Administration > System > Cluster Topology, select Settings in the right pane, and verify the Domain Name value.
+        -the BOSH url for the CUP server.
+-->
+
+        <title>Cisco AJAX XMPP Library - Basic Client</title>
+
+        <link rel="stylesheet" href="assets/css/reset.css"/>
+        <link rel="stylesheet" href="assets/css/sample.css"/>
+        <style>
+            .demo div{
+                margin: 20px 0px;
+            }
+            .messageRec {
+                color:#006699
+            }
+            .messageSent {
+                font-weight: bold;
+                color: pink;
+            }
+            #login-container td, #login-container th {
+                border: 0;
+            }
+        </style>
+
+
+        <script src="http://code.jquery.com/jquery-1.4.2.js"></script>
+        <script type="text/javascript" src="caxl/jabberwerx.js"></script>
+        <script type="text/javascript">
+
+            //Change these values to match the user, domain and BOSH URL for your system
+            //these values will be used to establish the connection to the server
+            var demoConfig = {
+                domain: "hpcl.co.in", //the domain specified for your CUP server
+                maxGraphAge: 5,
+                atSymbolAllowed: false,
+                logPersistence: false,
+                serviceDiscoveryEnabled: false,
+                httpBindingURL: "https://10.15.0.10:7335/httpbinding", //the BOSH url for your server
+                unsecureAllowed: true //unsecureAllowed should be true if plaintext authentication is allowed over unencrypted or unsecured HTTP channels
+            };
+
+            jabberwerx._config.unsecureAllowed = demoConfig.unsecureAllowed;
+            
+            //create new jabberwerx client
+            jabberwerx.$(document).ready(function() {
+                //jabberwerx.util.debug.log("CAXL echo client demo (version: " + jabberwerx.version + ")");
+                jabberwerx.$("#logout-div").hide();
+
+                //create the jabberwerx client
+                var client = new jabberwerx.Client('basic chat');
+
+                //when the user clicks the login button, the jabberwerx client will connect to the server
+                jabberwerx.$("#login").click(function() {
+                    try {
+                        //specify the BOSH url, and the success and error callback functions that will be passed to the connect method
+                        var arg = {
+                            httpBindingURL: demoConfig.httpBindingURL,
+                            successCallback: function success() {
+                                jabberwerx.$("#log").append("<br/>" + "connection successful");
+                                this; //The client
+                            },
+                            errorCallback:  function(err) {
+                                var tstr = jabberwerx.util.serializeXML(err);
+                                jabberwerx.util.debug.warn(tstr);
+                                jabberwerx.$("#log").text("Could not connect: " + tstr);
+                            }
+                        }
+
+                        //connect to server using username, password and arguments specified above
+                        client.connect(jabberwerx.$("#username").val() + "@" + demoConfig.domain,
+                                jabberwerx.$("#password").val(), arg);
+                    } catch (ex) {
+                        jabberwerx.util.debug.warn(ex.message);
+                        jabberwerx.$("#log").text("Could not connect: " + ex.message);
+                    }
+                });
+                
+                var connectedJID = function() {
+                    return client.connectedUser.jid + "/" + client.resourceName;
+                };
+
+                //caxl event binding
+                //when a caxl event occurs show notification in log section and hide/show buttons as needed
+                //bind to the clientStatusChanged event
+                client.event("clientStatusChanged").bind(function(evt) {
+                    if (evt.data.next == jabberwerx.Client.status_connected) {
+                        jabberwerx.$("#login-div").hide();
+                        //enableEcho(false);
+                        jabberwerx.$("#logout-div").show();
+                        jabberwerx.$("#log").append("<br/> Connected as " + connectedJID());
+                    }else if (evt.data.next == jabberwerx.Client.status_disconnected) {
+                        jabberwerx.$("#login-div").show();
+                        jabberwerx.$("#logout-div").hide();
+                        jabberwerx.$("#log").html("");
+                    } else {
+                        jabberwerx.$("#log").append("<br/>" + client.getClientStatusString(evt.data.next));
+                    }
+                });
+                jabberwerx.$("#to").hide();
+                //when user clicks send, the jabberwerx client sends the message
+                jabberwerx.$("#send").click(function () {
+                    //append domain to user name if user doesn't enter it
+                    try {
+                        var jid = jabberwerx.JID.asJID(jabberwerx.$("#to").val());
+                        if (!jid.getNode() && !jid.getResource()) {
+                            jid = jabberwerx.JID.asJID(jid.toString() + '@' + demoConfig.domain + '/' + client.resourceName);
+                        }
+                        if (jid.toString() != jabberwerx.$("#to").val()) {
+                            jabberwerx.$("#to").val(jid.toString());
+                        }
+
+                        //send message
+                        client.sendMessage(jid.toString(), jabberwerx.$("#message").val());
+                        jabberwerx.$("#log").append("<br/><span class='messageSent'><b>" + connectedJID() + "</b>: " + jabberwerx.$("#message").val()+ "</span>");
+                    } catch (ex) {
+                        jabberwerx.util.debug.warn(jabberwerx.$("#to").val() + " is not a valid JID or node");
+                    }
+                });
+
+                //display messages as they are received
+                client.event("messageReceived").bind(function(evt) {
+                    var message = evt.data;
+                    var body = message.getBody();
+                    if (body) {
+                        jabberwerx.$("#log").append("<br/> <span class='messageRec'><b>" + message.getFrom() + "</b>: " + body + "</span>");
+                    }
+                });
+
+
+
+                //when the user clicks the logout button, the jabberwerx client disconnects
+                 jabberwerx.$("#logout").click(function() {
+                    client.disconnect();
+                    jabberwerx.$("#log").text("");
+                });
+
+
+            });
+        </script>
+
+    </head>
+    <body>
+        <div class="demo">
+            <div id="login-div">
+                <table id="login-container"><tbody>
+                    <tr>
+                        <td><label for="username">Username:</label></td>
+                        <td><input type="text" id="username"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="password">Password:</label></td>
+                        <td><input type="password" id="password"/></td>
+                    </tr>
+                </tbody></table>
+                <div>
+                    <label for="login"></label>
+                    <button id="login">Login</button>
+                </div>
+            </div>
+            <div id="logout-div" style="margin-bottom: 10px">
+                <h3>Send a Message</h3>
+                <div>
+                    <label for="message">Message:</label>
+                    <input id="message" type="text" value="Hello" width="" size="20"/>
+                    <label for="to"></label>
+                    <input type="text" value='31919350' id="to" size="20"/>
+                    <button id="send">Send</button>
+                </div>
+                <div>
+                    <button id="logout">Logout</button>
+                </div>
+
+            </div>
+            <h3>Log:</h3>
+            <hr/>
+            <div id="log" >&nbsp</div>
+        </div>
+    </body>
+</html>
